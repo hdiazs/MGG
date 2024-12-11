@@ -23,6 +23,8 @@ def IDCPS(T0,T1, DA, DB, DC, DD):
 coef = pd.read_csv('../CSV/CoefReac.csv')
 thermoprops = pd.read_csv('../CSV/thermodynamic_properties.csv')
 
+# Propiedades termodinámicas 
+
 R = np.array(8.314) # J/(mol K) Constante de los gases ideales
 T = np.arange(1000,1500,50).reshape(-1,1) # [K]
 T0 = np.array(298.15) # K, Temperatura de referencia
@@ -35,6 +37,7 @@ D = np.array(thermoprops["D"]).reshape(-1,1)
 GF = np.array(thermoprops["GF"]).reshape(-1,1)
 HF = np.array(thermoprops["HF"]).reshape(-1,1)
 
+# Sistema reaccionante
 reac = np.transpose(np.array([coef["R_1"], coef["R_2"], coef["R_3"], coef["R_4"], coef["R_5"], coef["R_6"], coef["R_7"], coef["R_8"]]))
 
 DA = np.sum(A * reac, axis=0)
@@ -46,6 +49,8 @@ DHF = np.sum(HF * reac, axis=0)
 
 n = len(T)
 m = np.size(reac,1)
+
+# Determinación de la energía libre de Gibbs para las reacciones de gasificación a cada temperatura dada
 
 DG_RT_R = np.zeros((n,m))
 
