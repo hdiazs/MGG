@@ -94,7 +94,7 @@ def sistema(vars, DG, T):
 
 # Usar los valores específicos para DG
 
-y = np.zeros((n,9))
+y = np.zeros((n,9)) # Aqui depende del numero de incognitas en el sistema
 
 for i in range(n):
     DG = DGf_RT[i,:]
