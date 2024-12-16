@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from scipy.integrate import quad
+from scipy.optimize import fsolve
 
 
 def DCPH(T, DA, DB, DC, DD):
@@ -40,7 +41,7 @@ GF = np.array(thermoprops["GF"]).reshape(-1,1)
 HF = np.array(thermoprops["HF"]).reshape(-1,1)
 
 # Especies en el sistema
-reac = np.transpose(np.array([coef['CH4'],coef["H2O"],coef['CO'],coef['CO2'], coef['H2'],coef['SO2']]))
+reac = np.transpose(np.array([coef['CH4'],coef["H2O"],coef['CO'],coef['CO2'], coef['H2']]))
 
 
 DA = np.sum(A * reac, axis=0)
@@ -63,9 +64,7 @@ for i in range(n):
         IDCPH_R = IDCPH(T0, T[i].item(), DA[j].item(), DB[j].item(), DC[j].item(), DD[j].item())
         IDCPS_R = IDCPS(T0, T[i].item(), DA[j].item(), DB[j].item(), DC[j].item(), DD[j].item())
         DGf_RT[i,j] = (DGF[j].item() - DHF[j].item()) / (R * T0) + DHF[j].item() / (R * T[i].item())+ 1 / T[i].item() * IDCPH_R - IDCPS_R
-        print(f"{T[i].item()},{DGf_RT[i,j]*R*T[i].item()},{IDCPH_R},{IDCPS_R}")
 
-print(DGf_RT)
 
 # Modelo de equilibrio
 
@@ -79,6 +78,29 @@ print(DGf_RT)
 
 # Siendo reacciones que se llevan a cabo por arriba de los 1000 K, y a presiones atmosféricas se puede considerar como gases ideales
 
+# Definir el sistema de ecuaciones
+def sistema(vars, DG, T):
+    y1, y2, y3, y4, y5, l1, l2, l3, x = vars 
+    eq1 = DG[0] + np.log(y1) + l1 / (R * T) + 4 * l2 / (R * T)
+    eq2 = DG[1] + np.log(y2) + 2 * l2 / (R * T) + l3 / (R * T)
+    eq3 = DG[2] + np.log(y3) + l1 / (R * T) + l3 / (R * T)
+    eq4 = DG[3] + np.log(y4) + l1 / (R * T) + 2 * l3 / (R * T)
+    eq5 = DG[4] + np.log(y5) + 2 * l2 / (R * T)
+    eq6 = y1 + y3 + y4 - 2 / x
+    eq7 = 4 * y1 + 2 * y2 + 2 * y5 - 14 / x
+    eq8 = y2 + y3 + 2 * y4 - 3 / x
+    eq9 = y1 + y2 + y3 + y4 + y5 - 1
+    return [eq1, eq2, eq3, eq4, eq5, eq6, eq7, eq8, eq9]
 
+# Usar los valores específicos para DG
 
+for i in range(n):
+    DG = DGf_RT[i,:]
+    Ti = T[i].item()
 
+    # Solución inicial
+    solucion_inicial = [0.02, 0.02, 0.02, 0.02, 0.82, 1, 1, 1, 1]
+
+    # Resolver el sistema
+    soluciones = fsolve(sistema, solucion_inicial, args=(DG, Ti))
+    print(soluciones)
