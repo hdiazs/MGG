@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from scipy.integrate import quad
 from scipy.optimize import fsolve
-
+import matplotlib.pyplot as plt
 
 def DCPH(T, DA, DB, DC, DD):
     return DA + DB * T + DC * T**2 + DD * T**-2
@@ -27,7 +27,7 @@ thermoprops = pd.read_csv('../CSV/thermodynamic_properties.csv')
 # Propiedades termodinámicas 
 
 R = np.array(8.314) # J/(mol K) Constante de los gases ideales
-T = np.arange(1000,1500,50) # [K]
+T = np.arange(1000,1120,10) # [K]
 # T = np.array(1000)
 T = T.reshape(-1,1)
 T0 = np.array(298.15) # K, Temperatura de referencia
@@ -94,6 +94,8 @@ def sistema(vars, DG, T):
 
 # Usar los valores específicos para DG
 
+y = np.zeros((n,9))
+
 for i in range(n):
     DG = DGf_RT[i,:]
     Ti = T[i].item()
@@ -103,4 +105,14 @@ for i in range(n):
 
     # Resolver el sistema
     soluciones = fsolve(sistema, solucion_inicial, args=(DG, Ti))
-    print(soluciones)
+    y[i] = soluciones
+    solucion_inicial = soluciones
+
+
+plt.plot(T,y[ : , 0 ], c='black', label='CH4')
+plt.plot(T,y[ : , 1 ], c='blue', label='H2O')
+plt.plot(T,y[ : , 2 ], c='red', label='CO')
+plt.plot(T,y[ : , 3 ], c='green', label='CO2')
+# plt.plot(T,y[ : , 4 ], c='magenta', label='H2')
+plt.legend()
+plt.show()
