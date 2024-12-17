@@ -92,9 +92,9 @@ def sistema(vars, DG, T):
     eq9 = y1 + y2 + y3 + y4 + y5 - 1
     return [eq1, eq2, eq3, eq4, eq5, eq6, eq7, eq8, eq9]
 
-# Usar los valores específicos para DG
 
-y = np.zeros((n,9))
+
+y = np.zeros((n,9)) # Aqui depende del numero de incognitas en el sistema
 
 for i in range(n):
     DG = DGf_RT[i,:]
