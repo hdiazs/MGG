@@ -93,7 +93,10 @@ def sistema(vars, DG, T):
     return [eq1, eq2, eq3, eq4, eq5, eq6, eq7, eq8, eq9]
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7439b995588c38c4b2dfc75f5d4a87c19ce49505
 y = np.zeros((n,9)) # Aqui depende del numero de incognitas en el sistema
 
 for i in range(n):
