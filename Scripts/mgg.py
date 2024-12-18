@@ -24,11 +24,13 @@ def IDCPS(T0,T1, DA, DB, DC, DD):
 coef = pd.read_csv('../CSV/CoefReac.csv')
 thermoprops = pd.read_csv('../CSV/thermodynamic_properties.csv')
 
+
+
 # Propiedades termodinámicas 
 
 R = np.array(8.314) # J/(mol K) Constante de los gases ideales
 # T = np.arange(1000,1120,10) # [K]
-T = np.array(963.15) # [K]
+T = np.array(1003.15) # [K]
 T = T.reshape(-1,1)
 T0 = np.array(298.15) # K, Temperatura de referencia
 SB = np.array(1.32) # Relación de biomasa/vapor
@@ -80,7 +82,7 @@ for i in range(n):
 # Siendo reacciones que se llevan a cabo por arriba de los 1000 K, y a presiones atmosféricas se puede considerar como gases ideales
 
 
-Ak = np.array([2.88408925, 11.39263818, 6.406027213]) # Balance de masas atómicas en el sistema antes de la reacción C H O
+Ak = np.array([2.8841, 12.1962, 6.8078]) # Balance de masas atómicas en el sistema antes de la reacción C H O
 
 # Definir el sistema de ecuaciones
 def sistema(vars, DG, T, Ak):
