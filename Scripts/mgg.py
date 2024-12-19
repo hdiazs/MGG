@@ -30,10 +30,10 @@ thermoprops = pd.read_csv('../CSV/thermodynamic_properties.csv')
 
 R = np.array(8.314) # J/(mol K) Constante de los gases ideales
 # T = np.arange(1000,1120,10) # [K]
-T = np.array(1003.15) # [K]
+T = np.array(1000) # [K]
 T = T.reshape(-1,1)
 T0 = np.array(298.15) # K, Temperatura de referencia
-SB = np.array(1.32) # Relación de biomasa/vapor
+SB = np.array(0.287) # Relación de biomasa/vapor
 
 A = np.array(thermoprops["A"]).reshape(-1,1)
 B = np.array(thermoprops["B"]).reshape(-1,1)
@@ -82,7 +82,7 @@ for i in range(n):
 # Siendo reacciones que se llevan a cabo por arriba de los 1000 K, y a presiones atmosféricas se puede considerar como gases ideales
 
 
-Ak = np.array([2.8841, 12.1962, 6.8078]) # Balance de masas atómicas en el sistema antes de la reacción C H O
+Ak = np.array([4.55, 18.7444, 14.564]) # Balance de masas atómicas en el sistema antes de la reacción C H O
 
 # Definir el sistema de ecuaciones
 def sistema(vars, DG, T, Ak):
